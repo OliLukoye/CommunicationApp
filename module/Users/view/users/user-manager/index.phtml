@@ -1,0 +1,33 @@
+<h2>Users</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>User ID/Email</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->users as $value) : ?>
+        <tr>
+            <td><?php echo $this->escapeHtml($value->name); ?></td>
+            <td><?php echo $this->escapeHtml($value->email); ?></td>
+            <td>
+                <a href="<?php echo $this->url(NULL, array(
+                    'controller' => 'UserManager', 
+                    'action' => 'edit', 
+                    'id' => $value->id)); ?>">Edit</a> |
+                <a href="<?php echo $this->url(NULL, array(
+                    'controller' => 'UserManager', 
+                    'action' => 'delete', 
+                    'id' => $value->id)); ?>" onclick="return confirm('Удалить пользователя?') ? true : false;">Delete</a>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<a href="<?php echo $this->url(NULL, array(
+		'controller' => 'UserManager', 
+		'action' => 'add'
+	)); ?>" class="btn">Add New User</a>
+

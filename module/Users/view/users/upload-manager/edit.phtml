@@ -1,0 +1,47 @@
+<h3>Upload Sharing</h3>
+<h5>(<?php echo $this->uploadFile->filename; ?>)</h5>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Shared User</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->sharedUsers as $user) : ?>
+        <tr>
+            <td><?php echo $this->escapeHtml($user->name); ?></td>
+            <td>
+                <a href="<?php echo $this->url(NULL, array(
+                    'controller' => 'UploadManager', 
+                    'action' => 'deleteShared', 
+                    'id' => $user->id)); ?>" onclick="return confirm('Удалить файл?') ? true : false;">Delete</a>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<br>
+<h3>Add Sharing</h3>
+<?php 
+$form = $this->form;
+$form->prepare();
+$form->setAttribute('action', $this->url(NULL, array('controller'=>'UploadManager', 'action'=>'addSharing')));
+$form->setAttribute('method', 'post');
+echo $this->form()->openTag($form);
+?>
+<dl class="zend_form">
+    <dt><?php echo $this->formLabel($form->get('user_id')); ?></dt>
+    <dd><?php 
+        echo $this->formElement($form->get('user_id'));
+        echo $this->formElementErrors($form->get('user_id'));
+    ?></dd>
+    <dd><?php 
+        echo $this->formElement($form->get('submit'));
+        echo $this->formElementErrors($form->get('submit'));
+    ?></dd>
+    <?php echo $this->formElement($form->get('upload_id')); ?>
+</dl>
+
+<?php echo $this->form()->closeTag(); ?>
+

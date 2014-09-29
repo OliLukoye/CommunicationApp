@@ -1,0 +1,34 @@
+<section class="login">
+    <h2>Upload</h2>
+    <?php if ($this->error): ?>
+    <p class="error">
+        There were one or more issues with your submission.
+        Please correct them as indicated below.
+    </p>
+    <?php endif; ?>
+    
+    <?php 
+    $form = $this->form;
+    $form->prepare();
+    $form->setAttribute('action', $this->url(NULL, array('controller'=>'UploadManager', 'action'=>'process')));
+    $form->setAttribute('method', 'post');
+    echo $this->form()->openTag($form);
+    ?>
+    
+    <dl class="zend_form">
+        <dt><?php echo $this->formLabel($form->get('fileupload')); ?></dt>
+        <dd><?php 
+            echo $this->formElement($form->get('fileupload'));
+            echo $this->formElementErrors($form->get('fileupload'));
+        ?></dd>
+        <dd><?php 
+            echo $this->formElement($form->get('submit'));
+            echo $this->formElementErrors($form->get('submit'));
+        ?></dd>
+        <dd><?php 
+            echo $this->formElement($form->get('label'));
+        ?></dd>
+    </dl>
+    
+    <?php echo $this->form()->closeTag(); ?>
+</section>

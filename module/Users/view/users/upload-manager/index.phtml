@@ -1,0 +1,62 @@
+<h2>My Uploads</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Lable</th>
+            <th>Filename</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->myUploads as $value) : ?>
+        <tr>
+            <td><?php echo $this->escapeHtml($value->label); ?></td>
+            <td><?php echo $this->escapeHtml($value->filename); ?></td>
+            <td>
+                <a href="<?php echo $this->url(NULL, array(
+                    'controller' => 'UploadManager', 
+                    'action' => 'edit', 
+                    'id' => $value->id)); ?>" >Edit</a>
+                |
+                <a href="<?php echo $this->url(NULL, array(
+                    'controller' => 'UploadManager', 
+                    'action' => 'delete', 
+                    'id' => $value->id)); ?>" onclick="return confirm('Удалить файл?') ? true : false;">Delete</a>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+<h2>Shared Uploads</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Label</th>
+            <th>Filename</th>
+            <th>Action</th>
+            <th>Shared By</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->sharingUploads as $key => $value) : ?>
+        <tr>
+            <td><?php echo $this->escapeHtml($value['label']); ?></td>
+            <td><?php echo $this->escapeHtml($value['filename']); ?></td>
+            <td>
+                <a href="<?php echo $this->url(NULL, array(
+                    'controller' => 'UploadManager', 
+                    'action' => 'fileDownload', 
+                    'id' => $key)); ?>" onclick="return confirm('Скачать файл?') ? true : false;">Download</a>
+            </td>
+            <td><?php echo $this->escapeHtml($value['owner']); ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+<a href="<?php echo $this->url(NULL, array(
+		'controller' => 'UploadManager', 
+		'action' => 'upload'
+	)); ?>" class="btn">Add Upload</a>
+
