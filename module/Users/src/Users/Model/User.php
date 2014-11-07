@@ -4,7 +4,7 @@ namespace Users\Model;
 /**
  * Description of User
  *
- * @author ADMIN
+ * @author OliLukoye
  */
 class User 
 {

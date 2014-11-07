@@ -1,0 +1,37 @@
+<?php
+$this->headScript()->appendScript(
+'$(function () {
+    $("#btnRefresh").click(function (event) {
+        document.getElementById("messageListFrame").contentWindow.location.reload(true);
+    });
+});', 'text/javascript');
+
+$this->headScript()->appendScript(
+'setInterval(function(){
+    document.getElementById("messageListFrame").contentWindow.location.reload(true);
+}, 5000);', 'text/javascript');
+
+$this->headStyle()->appendStyle('
+    #userName { width: 100px; margin-top: 10px; display: inline }
+    #messageText { width: 700px; margin-top: 10px }
+');
+?>
+
+<h3>Group Chat</h3>
+<iframe src="<?php echo $this->url('users/group-chat', array(
+    'action' => 'messageList'
+    )); ?>" width="80%" height="400px" id="messageListFrame"></iframe>
+
+<?php
+// Визуализация открывающего тега
+echo $this->form()->openTag($form);
+
+// ... цикл визуализации элементов формы...
+echo '<label id="userName">'. $userName .': </label>';
+foreach ($form as $element) {
+    echo $this->formElement($element); // <-- Magic!
+    echo $this->formElementErrors($element);
+}
+
+// Визуализация закрывающего тега
+echo $this->form()->closeTag();

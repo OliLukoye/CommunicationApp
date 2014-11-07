@@ -6,7 +6,7 @@ use Zend\Db\TableGateway\TableGateway;
 /**
  * Description of UserTable
  *
- * @author ADMIN
+ * @author OliLukoye
  */
 class UserTable 
 {

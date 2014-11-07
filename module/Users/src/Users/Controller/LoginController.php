@@ -5,7 +5,8 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Users\Form\LoginForm;
 use Zend\Authentication\AuthenticationService;
-use Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter;
+//use Zend\Authentication\Adapter\DbTable as DbTableAuthAdapter; -- deprecated
+use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as DbTableAuthAdapter;
 
 /**
  * Description of LoginController

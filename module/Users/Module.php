@@ -16,6 +16,8 @@ use Users\Model\User;
 use Users\Model\UserTable;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Authentication\AuthenticationService;
+use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as DbTableAuthAdapter;
 
 class Module implements AutoloaderProviderInterface
 {
@@ -52,6 +54,15 @@ class Module implements AutoloaderProviderInterface
     {
         return array(
             'factories' => array(
+                // сервисы
+                'AuthService' => function($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $dbTableAuthAdapter = new DbTableAuthAdapter($dbAdapter, 'user','email','password', 'MD5(?)');
+
+                    $authService = new AuthenticationService();
+                    $authService->setAdapter($dbTableAuthAdapter);
+                    return $authService;
+                },
                 // база данных
                 'UserTable' => function ($sm) {
                     $tableGateway = $sm->get('UserTableGateway');
@@ -79,6 +90,10 @@ class Module implements AutoloaderProviderInterface
                 'UploadSharingTableGateway' => function ($sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     return new TableGateway('uploads_sharing', $dbAdapter);
+                },
+                'ChatMessagesTableGateway' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    return new TableGateway('chat_messages', $dbAdapter);
                 },
                 // формы
                 'LoginForm' => function ($sm) {
