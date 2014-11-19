@@ -114,4 +114,94 @@ class GroupChatController extends AbstractActionController
         $chatMessageTG->insert($data);
         return TRUE;
     }
+    
+    public function sendOfflineMessageAction()
+    {
+        $userTable = $this->getServiceLocator()->get('UserTable');
+        $allUsers = $userTable->fetchAll();
+        $authUser = $this->getLoggedInUser();
+        $usersList = array();
+        foreach ($allUsers as $user) {
+            if ($authUser->email != $user->email) {
+                $usersList[$user->id] = $user->name . '(' . $user->email . ')';
+            }
+        }
+        
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $msgSubj = $request->getPost()->get('messageSubject');
+            $msgText = $request->getPost()->get('message');
+            $toUser = $request->getPost()->get('toUserId');
+            $fromUser = $user->id;
+            $this->sendOfflineMessage($msgSubj, $msgText, $fromUser, $toUser);
+            // Для предотварщения дублирования записей при обновлении
+            return $this->redirect()->toRoute('users/group-chat', array('action' => 'sendOfflineMessage'));
+        }
+        
+        // Подготовка формы отправки сообщения
+        $form = new \Zend\Form\Form();
+        $form->setAttribute('method', 'POST');
+        $form->setAttribute('enctype', 'multipart/form-data');
+        $form->add(array(
+            'name' => 'toUserID',
+            'type' => 'Zend\Form\Element\Select',
+            'attributes' => array(
+                'type' => 'select'
+            ),
+            'options' => array(
+                'label' => 'To User',
+            ),
+        ));
+        $form->add(array(
+            'name' => 'messageSubject',
+            'attributes' => array(
+                'type' => 'text',
+                'id' => 'messageSubject',
+                'required' => 'required'
+            ),
+            'options' => array(
+                'label' => 'Subject',
+            ),
+        ));
+        $form->add(array(
+            'name' => 'message',
+            'attributes' => array(
+                'type' => 'textarea',
+                'id' => 'message',
+                'required' => 'required'
+            ),
+            'options' => array(
+                'label' => 'Message',
+            ),
+        ));
+        $form->add(array(
+            'name' => 'submit',
+            'attributes' => array(
+                'type' => 'submit',
+                'value' => 'Send'
+            ),
+            'options' => array(
+                'label' => 'Send'
+            ),
+        ));
+    }
+    
+    protected function sendOfflineMessage($msgSubj, $msgText, $fromUserId, $toUserId)
+    {
+        $userTable = $this->getServiceLocator()->get('UserTable');
+        
+        $fromUser = $userTable->getUser($fromUserId);
+        $toUser = $userTable->getUser($toUserId);
+        
+        $mail = new \Zend\Mail\Message();
+        $mail->setFrom($fromUser->email, $fromUser->name);
+        $mail->addTo($toUser->email, $toUser->name);
+        $mail->setSubject($msgSubj);
+        $mail->setBody($msgText);
+        
+        $transport = new \Zend\Mail\Transport\Sendmail();
+        $transport->send($mail);
+        
+        return TRUE;
+    }
 }
