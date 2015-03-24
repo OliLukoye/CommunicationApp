@@ -1,0 +1,58 @@
+<h2>My Images</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Label</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->myImageFileUploads as $value) : ?>
+        <tr>
+            <td><a href="<?php echo $this->url('users/media', array(
+                                                'action' => 'view', 
+                                                'id' => $value->id,
+                    )); ?>">
+                    <img src="<?php echo $this->url('users/media', array(
+                                'action' => 'showImage',
+                                'id' => $value->id,
+                                'subaction' => 'thumb'
+                )); ?>" alt="<?php echo $this->escapeHtml($value->filename); ?>"></a></td>
+            <td><?php echo $this->escapeHtml($value->label); ?></td>
+            <td>
+                <a href="<?php echo $this->url(NULL, array(
+                    'controller' => 'UploadManager', 
+                    'action' => 'delete', 
+                    'id' => $value->id)); ?>" onclick="return confirm('Удалить файл?') ? true : false;">Delete</a>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<hr>
+<a href="<?php echo $this->url(NULL, array(
+		'controller' => 'MediaManager', 
+		'action' => 'upload'
+	)); ?>" class="btn">Add Image Upload</a>
+<hr>
+<br />
+<h3>Google Photos - Albums</h3>
+<?php foreach ($this->googleAlbums as $googleAlbum) : ?>
+<?php if ( $googleAlbum['label'] == 'Profile Photos') continue; ?>
+<h4><?php echo $this->escapeHtml($googleAlbum['label']); ?></h4>
+    <?php foreach ($googleAlbum['photos'] as $googleAlbumPhoto) : ?>
+    <div class="googleAlbumPhoto" style="padding: 10px; display: inline">
+        <a href="<?php echo $this->escapeHtml($googleAlbumPhoto['photoUrl']); ?>">
+            <img src="<?php echo $this->escapeHtml($googleAlbumPhoto['thumbUrl']); ?>" alt="none img">
+        </a>
+    </div>
+    <?php endforeach; ?>
+<?php endforeach; ?>
+<!--<hr>
+<a href="<?php /* echo $this->url(NULL, array(
+		'controller' => 'MediaManager', 
+		'action' => 'upload'
+	)); */?>" class="btn">Add Image Upload</a>-->
+

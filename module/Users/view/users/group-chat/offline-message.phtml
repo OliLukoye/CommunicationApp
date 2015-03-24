@@ -1,0 +1,27 @@
+<!--<h3>Отправить оффлайн сообщение</h3>-->
+<?php
+$form->setAttribute('class', 'form-horizontal');
+echo $this->form()->openTag($form);
+?>
+<fieldset>
+    <legend>Отправить оффлайн сообщение</legend>
+    <?php echo $this->formLabel($form->get('toUserID')); ?>
+    <?php echo $this->formElement($form->get('toUserID')); ?>
+    <?php echo $this->formElementErrors($form->get('toUserID')); ?>
+    
+    <?php echo $this->formLabel($form->get('messageSubject')); ?>
+    <?php echo $this->formElement($form->get('messageSubject')); ?>
+    <?php echo $this->formElementErrors($form->get('messageSubject')); ?>
+    
+    <?php echo $this->formLabel($form->get('message')); ?>
+    <?php echo $this->formElement($form->get('message')); ?>
+    <?php echo $this->formElementErrors($form->get('message')); ?>
+    
+    <?php echo $this->formLabel($form->get('submit')); ?>
+    <?php echo $this->formElement($form->get('submit')); ?>
+    <?php echo $this->formElementErrors($form->get('submit')); ?>
+</fieldset>
+<?php
+// Визуализация закрывающего тега
+echo $this->form()->closeTag();
+

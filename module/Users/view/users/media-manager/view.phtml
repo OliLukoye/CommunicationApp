@@ -1,0 +1,34 @@
+<section class="upload">
+    <h2><?php echo $this->escapeHtml($upload->label); ?></h2>
+    <h4><?php echo $this->escapeHtml($upload->filename); ?></h4>
+    <p>
+        <a href="<?php echo $this->url('users/media', array(
+                                                'action' => 'view', 
+                                                'id' => $upload->id,
+                                                'subaction' => 'cw',
+                    )); ?>">Повернуть влево</a> |
+        <a href="<?php echo $this->url('users/media', array(
+                                                'action' => 'view', 
+                                                'id' => $upload->id,
+                    )); ?>">Оригинал</a> |
+        <a href="<?php echo $this->url('users/media', array(
+                                                'action' => 'view', 
+                                                'id' => $upload->id,
+                                                'subaction' => 'ccw',
+                    )); ?>">Повернуть вправо</a>
+    </p>
+    <?php if (!$action) : ?>
+    <img src="<?php echo $this->url('users/media', array(
+                                    'action' => 'showImage',
+                                    'id' => $upload->id,
+                                    'subaction' => 'full'
+                                )); ?>" alt="<?php echo $this->escapeHtml($upload->filename); ?>">
+    <?php else : ?>
+    <img src="<?php echo $this->url('users/media', array(
+                                    'action' => 'rotateImage',
+                                    'id' => $upload->id,
+                                    'subaction' => $action
+                                )); ?>" alt="<?php echo $this->escapeHtml($upload->filename); ?>">
+    <?php endif; ?>
+</section>
+<a href="<?php echo $this->url('users/media'); ?>">Назад в Галерею</a>

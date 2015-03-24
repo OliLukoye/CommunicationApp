@@ -48,6 +48,15 @@ class Module implements AutoloaderProviderInterface
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+        
+        $sharedEventManager = $eventManager->getSharedManager(); // общий менеджер событий
+        $sharedEventManager->attach(__NAMESPACE__, MvcEvent::EVENT_DISPATCH, function ($e) {
+            $controller = $e->getTarget(); // обслуживаемый контроллер
+            $controllerName = $controller->getEvent()->getRouteMatch()->getParam('controller');
+            if (!in_array($controllerName, array('Users\Controller\Index', 'Users\Controller\Register', 'Users\Controller\Login'))){
+                $controller->layout('layout/myaccount');
+            }
+        });
     }
     
     public function getServiceConfig()
@@ -91,9 +100,43 @@ class Module implements AutoloaderProviderInterface
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     return new TableGateway('uploads_sharing', $dbAdapter);
                 },
+                'ImageUploadTable' => function ($sm) {
+                    $tableGateway = $sm->get('ImageUploadTableGateway');
+                    $table = new \Users\Model\ImageUploadTable($tableGateway);
+                    return $table;
+                },
+                'ImageUploadTableGateway' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new \Users\Model\ImageUpload());
+                    return new TableGateway('image_uploads', $dbAdapter, NULL, $resultSetPrototype);
+                },
                 'ChatMessagesTableGateway' => function ($sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     return new TableGateway('chat_messages', $dbAdapter);
+                },
+                'StoreProductTable' => function ($sm) {
+                    $tableGateway = $sm->get('StoreProductTableGateway');
+                    $table = new \Users\Model\StoreProductTable($tableGateway);
+                    return $table;
+                },
+                'StoreProductTableGateway' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new \Users\Model\StoreProduct());
+                    return new TableGateway('store_products', $dbAdapter, NULL, $resultSetPrototype);
+                },
+                'StoreOrderTable' => function ($sm) {
+                    $tableGateway = $sm->get('StoreOrderTableGateway');
+                    $productTableGateway = $sm->get('StoreProductTableGateway');
+                    $table = new \Users\Model\StoreOrderTable($tableGateway, $productTableGateway);
+                    return $table;
+                },
+                'StoreOrderTableGateway' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new \Users\Model\StoreOrder());
+                    return new TableGateway('store_orders', $dbAdapter, NULL, $resultSetPrototype);
                 },
                 // формы
                 'LoginForm' => function ($sm) {

@@ -131,11 +131,12 @@ class GroupChatController extends AbstractActionController
         if ($request->isPost()) {
             $msgSubj = $request->getPost()->get('messageSubject');
             $msgText = $request->getPost()->get('message');
-            $toUser = $request->getPost()->get('toUserId');
-            $fromUser = $user->id;
+            $toUser = $request->getPost()->get('toUserID');
+            $fromUser = $authUser->id;
             $this->sendOfflineMessage($msgSubj, $msgText, $fromUser, $toUser);
             // Для предотварщения дублирования записей при обновлении
-            return $this->redirect()->toRoute('users/group-chat', array('action' => 'sendOfflineMessage'));
+            //return $this->redirect()->toRoute('users/group-chat', array('action' => 'sendOfflineMessage'));
+            return $this->redirect()->toRoute('users/group-chat');
         }
         
         // Подготовка формы отправки сообщения
@@ -150,6 +151,7 @@ class GroupChatController extends AbstractActionController
             ),
             'options' => array(
                 'label' => 'To User',
+                'value_options' => $usersList,
             ),
         ));
         $form->add(array(
@@ -184,6 +186,14 @@ class GroupChatController extends AbstractActionController
                 'label' => 'Send'
             ),
         ));
+        
+        $viewModel = new ViewModel(array(
+            'form' => $form,
+        ));
+        $viewModel->setTemplate('users/group-chat/offline-message');
+        //$viewModel->setTerminal(TRUE);
+        
+        return $viewModel;
     }
     
     protected function sendOfflineMessage($msgSubj, $msgText, $fromUserId, $toUserId)
@@ -194,7 +204,8 @@ class GroupChatController extends AbstractActionController
         $toUser = $userTable->getUser($toUserId);
         
         $mail = new \Zend\Mail\Message();
-        $mail->setFrom($fromUser->email, $fromUser->name);
+        //$mail->setFrom($fromUser->email, $fromUser->name);
+        $mail->setFrom('vaddemo@mail.ru', 'VadiK');
         $mail->addTo($toUser->email, $toUser->name);
         $mail->setSubject($msgSubj);
         $mail->setBody($msgText);

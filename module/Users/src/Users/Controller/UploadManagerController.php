@@ -5,7 +5,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Authentication\AuthenticationService;
 use Users\Form\UploadForm;
-use Zend\Debug\Debug;
+//use Zend\Debug\Debug;
 
 /**
  * Description of UploadManagerController

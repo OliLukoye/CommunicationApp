@@ -16,6 +16,10 @@
     ?>
     
     <dl class="zend_form">
+        <dt><?php echo $this->formLabel($form->get('label')); ?></dt>
+        <dd><?php 
+            echo $this->formElement($form->get('label'));
+        ?></dd>
         <dt><?php echo $this->formLabel($form->get('fileupload')); ?></dt>
         <dd><?php 
             echo $this->formElement($form->get('fileupload'));
@@ -24,9 +28,6 @@
         <dd><?php 
             echo $this->formElement($form->get('submit'));
             echo $this->formElementErrors($form->get('submit'));
-        ?></dd>
-        <dd><?php 
-            echo $this->formElement($form->get('label'));
         ?></dd>
     </dl>
     

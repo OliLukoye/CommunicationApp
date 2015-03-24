@@ -35,3 +35,7 @@ foreach ($form as $element) {
 
 // Визуализация закрывающего тега
 echo $this->form()->closeTag();
+?>
+<br>
+<p><a href="<?php echo $this->url('users/group-chat', array('action' => 'sendOfflineMessage')); ?>" class="btn">Отправить email</a></p>
+

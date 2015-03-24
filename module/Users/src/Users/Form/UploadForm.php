@@ -17,6 +17,15 @@ class UploadForm extends Form
         $this->setAttribute('enctype','multipart/form-data');
         
         $this->add(array(
+            'name' => 'label',
+            'attributes' => array(
+                'type' => 'text',
+            ),
+            'options' => array(
+                'label' => 'File Description',
+            ),
+        ));
+        $this->add(array(
             'name' => 'fileupload',
             'attributes' => array(
                 'type' => 'file',
@@ -30,13 +39,6 @@ class UploadForm extends Form
             'attributes' => array(
                 'type' => 'submit',
                 'value' => 'Upload'
-            ),
-        ));
-        $this->add(array(
-            'name' => 'label',
-            'attributes' => array(
-                'type' => 'hidden',
-                'value' => 'Corporate Report'
             ),
         ));
     }

@@ -8,6 +8,10 @@ return array(
             'Users\Controller\UserManager'   => 'Users\Controller\UserManagerController',
             'Users\Controller\UploadManager' => 'Users\Controller\UploadManagerController',
             'Users\Controller\GroupChat'     => 'Users\Controller\GroupChatController',
+            'Users\Controller\MediaManager'  => 'Users\Controller\MediaManagerController',
+            'Users\Controller\Search'        => 'Users\Controller\SearchController',
+            'Users\Controller\Store'         => 'Users\Controller\StoreController',
+            'Users\Controller\StoreAdmin'    => 'Users\Controller\StoreAdminController',
         ),
     ),
     'router' => array(
@@ -34,10 +38,11 @@ return array(
                     'default' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/[:controller[/:action]]',
+                            'route'    => '/[:controller[/:action[/:id]]]',
                             'constraints' => array(
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
                                 'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'id'         => '[a-zA-Z0-9_-]*',
                             ),
                             'defaults' => array(
                             ),
@@ -85,6 +90,49 @@ return array(
                             ),
                         ),
                     ),
+                    'media' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/media[/:action[/:id[/:subaction]]]',
+                            'constraints' => array(
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'id'     => '[a-zA-Z0-9_-]*',
+                                'subaction' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Users\Controller\MediaManager',
+                                'action'     => 'index',
+                            ),
+                        ),
+                    ),
+                    'store' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/store[/:action[/:id]]',
+                            'constraints' => array(
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'id'     => '[a-zA-Z0-9_-]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Users\Controller\Store',
+                                'action'     => 'index',
+                            ),
+                        ),
+                    ),
+                    'store-admin' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/store-admin[/:action[/:id]]',
+                            'constraints' => array(
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'id'     => '[a-zA-Z0-9_-]*',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Users\Controller\StoreAdmin',
+                                'action'     => 'index',
+                            ),
+                        ),
+                    ),
                 ),
             ),
         ),
@@ -93,8 +141,13 @@ return array(
         'template_path_stack' => array(
             'users' => __DIR__ . '/../view',
         ),
+        'template_map' => array(
+            'layout/myaccount' => __DIR__ . '/../view/layout/myaccount-layout.phtml',
+        ),
     ),
     'module_config' => array(
-        'upload_location' => __DIR__ . '/../../../data/uploads',
+        'upload_location'       => __DIR__ . '/../../../data/uploads',
+        'image_upload_location' => __DIR__ . '/../../../data/images',
+        'search_index' => __DIR__ . '/../../../data/search_index',
     ),
 );

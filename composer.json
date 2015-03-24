@@ -7,8 +7,34 @@
         "zf2"
     ],
     "homepage": "http://framework.zend.com/",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.zendframework.com/"
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "zendframework/zendsearch",
+                "version": "0.1",
+                "source": {
+                    "url": "https://github.com/zendframework/ZendSearch.git",
+                    "type": "git",
+                    "reference": "master"
+                }
+            }
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "ZendSearch\\": "vendor/zendframework/zendsearch/library/"
+        }
+    },
     "require": {
         "php": ">=5.3.3",
-        "zendframework/zendframework": "2.3.*"
+        "zendframework/zendframework": "2.3.*",
+        "webino/webino-image-thumb" : "1.*",
+        "zendframework/zendgdata" : "2.0.*",
+        "zendframework/zendsearch": "0.1"
     }
 }
